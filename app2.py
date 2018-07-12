@@ -14,7 +14,7 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 parser = reqparse.RequestParser()
-parser.add_argument('task')
+parser.add_argument('val')
 
 class Row(Base):
     __tablename__ = 't2'
@@ -31,13 +31,17 @@ class Work(Resource):
             return {idx: 'not found'}
 
     def post(self, idx):
-        new_row = Row(idx=idx, val=parser.parse_args()['val'])
-        session.add(new_user)
-        session.commit()
+        try:
+            new_row = Row(idx=idx, val=parser.parse_args()['val'])
+            session.add(new_row)
+            session.commit()
+            return {'idx':'done'}
+        except:
+            return {'idx':'failed'}
 
     def delete(self, idx):
         try:
-            session.delete(idx)
+            session.delete(session.query(Row).get(idx))
             session.commit()
             return {idx: 'delete done'}
         except:
@@ -45,8 +49,8 @@ class Work(Resource):
 
     def put(self, idx):
         val = parser.parse_args()['val']
-        TODOS[todo_id] = task
-        return task, 201
+        session.query(Row).filter(Row.idx==idx).update({'val':val})
+        return {idx: val}
 
 
 class AllData(Resource):

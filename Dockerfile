@@ -26,11 +26,12 @@ RUN pip install Flask==1.0.2 \
 WORKDIR /APP
 
 ADD . /APP
-
-RUN service mysql start
-RUN mysql -uroot -p123 -e \
+RUN service mysql start && \
+mysql -uroot -p123 -e \
 "create database test;\
 use test;\
-create table if not exists t2 (idx char(16),val char(16));\
-insert into t2 value ('aaa','aa0'),('aab','aa1'),('aac','aa2'),('aad','aa3');"
-#CMD python app.py
+create table if not exists t1 (user_name char(16),pwd char(16));\
+insert into t1 value ('aaa','aa0'),('aab','aa1'),('aac','aa2'),('aad','aa3');" 
+CMD /usr/bin/mysqld_safe & python app.py 
+
+

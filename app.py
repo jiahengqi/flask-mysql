@@ -63,12 +63,9 @@ def signup_request():
     # engine = create_engine('mysql+mysqlconnector://root:123@localhost/test')
     # DBSession = sessionmaker(bind=engine)
     # session = DBSession()
-    try:
-        user = session.query(User).filter(User.user_name==request.form['username']).one()
+    if session.query(User).filter(User.user_name==request.form['username']).count() > 0:
         # session.close()
         return 'username exist'
-    except:
-        pass
     new_user = User(user_name=request.form['username'], pwd=pwd)
     session.add(new_user)
     session.commit()
