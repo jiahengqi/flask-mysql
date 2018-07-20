@@ -1,4 +1,5 @@
 from __future__ import print_function
+import time
 from flask import Flask, Markup, request, render_template, json
 from sqlalchemy import Column, String, create_engine
 from sqlalchemy.orm import sessionmaker
@@ -71,7 +72,7 @@ def signup_request():
     session.commit()
     # session.close()
     #return render_template('login.html')
-    return {User.user_name:'signup success'}
+    return request.form['username']+'signup success'
 
 @app.route('/newpwd')
 def newpwd():
@@ -94,7 +95,7 @@ def newpwd_request():
         session.commit()
         # session.close()
         #return render_template('login.html')
-        return {User.user_name:'change password success'}
+        return request.form['username']+'change password success'
 
 @app.route('/delete_request', methods=['DELETE'])
 def delete_request():
@@ -114,7 +115,7 @@ def delete_request():
         # session.close()
         print('done')
         #return render_template('login.html')
-        return {User.user_name:'delete account success'}
+        return request.form['username']+'delete account success'
     except:
         print('username not exist')
         return 'username not exist'
